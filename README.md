@@ -239,61 +239,7 @@ changes to reduce false positives).
 
 ---
 
-## Future Improvements
 
-- Support for `.pcapng` capture comments and multi-interface captures
-- Configurable allow-list of expected gateway MAC addresses to reduce
-  false positives in environments with legitimate failover/HA setups
-- Additional detectors: DNS spoofing indicators, SYN flood heuristics,
-  port-scan detection
-- Export findings directly to a SIEM-friendly format (e.g. CEF, Syslog)
-- Optional GUI/web front-end for uploading PCAPs and browsing reports
-- Batch mode to analyze and compare multiple PCAP files in one run
-- Dockerfile for a fully containerized, dependency-free run
-
----
-
-## GitHub Project Description
-
-> **Advanced Packet Analyzer with ARP Spoofing Detection** — A Python-based
-> defensive security tool that parses offline PCAP files with Scapy,
-> builds IP-to-MAC mapping tables, and flags possible ARP spoofing
-> indicators. Generates CSV/JSON/HTML security reports with an
-> interactive Plotly dashboard. Modular architecture, full type hints,
-> logging, and a Pytest test suite. Educational / defensive use only —
-> no live capture, injection, or offensive functionality.
-
----
-
-## Resume Project Description
-
-> **Advanced Packet Analyzer with ARP Spoofing Detection** — Built a
-> modular Python security tool that parses offline PCAP files (Scapy),
-> detects ARP spoofing indicators via IP-to-MAC mapping analysis, and
-> generates automated CSV/JSON/HTML reports with an interactive Plotly
-> dashboard. Implemented centralized logging, graceful error handling
-> for malformed packets, a CLI with `argparse`, and a Pytest suite
-> covering parsing, detection, and reporting logic.
-
----
-
-## LinkedIn Project Description
-
-> 🔒 Built an **Advanced Packet Analyzer with ARP Spoofing Detection** —
-> a defensive Python security tool for offline network forensics.
->
-> It parses PCAP files with Scapy across Ethernet/ARP/IPv4/TCP/UDP/ICMP,
-> builds an IP-to-MAC mapping table, and flags suspicious MAC changes
-> that indicate possible ARP spoofing / cache poisoning attacks.
->
-> Results are exported to CSV, JSON, and an interactive HTML dashboard
-> (Plotly + Jinja2) showing protocol distribution and flagged events.
->
-> Tech: Python, Scapy, Pandas, Plotly, Jinja2, Pytest.
->
-> #cybersecurity #python #networksecurity #blueteam #infosec
-
----
 
 ## License
 
