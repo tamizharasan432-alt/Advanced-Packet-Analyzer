@@ -191,7 +191,6 @@ python main.py sample_data/sample.pcap --output-dir reports_out --verbose
 
 ## Screenshots
 
-> Place screenshots of the console output and the HTML dashboard here.
 
 | Console Summary | HTML Security Dashboard |
 |---|---|<img width="1918" height="1078" alt="console_summary png" src="https://github.com/user-attachments/assets/8547c542-9765-4461-9980-9b4a85f82567" />
