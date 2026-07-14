@@ -1,0 +1,43 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Logs
+logs/*.log
+logs/*.log.*
+
+# Generated reports (keep the folder, ignore generated output)
+analysis_report.csv
+analysis_report.json
+analysis_report.html
+*.csv
+*.json
+!sample_data/*.json
+
+# Captured/generated PCAPs (keep sample.pcap tracked intentionally)
+*.pcap
+*.pcapng
+!sample_data/sample.pcap
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/

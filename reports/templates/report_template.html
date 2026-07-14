@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Advanced Packet Analyzer - Security Report</title>
+<style>
+    :root {
+        --bg: #0b0f14;
+        --panel: #131a22;
+        --border: #223140;
+        --text: #d7e2ea;
+        --muted: #7d93a3;
+        --accent: #39ff88;
+        --danger: #ff4d5e;
+        --warning: #ffb020;
+    }
+    * { box-sizing: border-box; }
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Consolas', 'JetBrains Mono', monospace;
+        margin: 0;
+        padding: 32px;
+    }
+    h1 {
+        color: var(--accent);
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 12px;
+    }
+    h2 {
+        color: var(--accent);
+        margin-top: 40px;
+    }
+    .meta {
+        color: var(--muted);
+        margin-bottom: 24px;
+        font-size: 0.9em;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px 20px;
+    }
+    .card .value {
+        font-size: 2em;
+        color: var(--accent);
+        font-weight: bold;
+    }
+    .card.danger .value { color: var(--danger); }
+    .card .label {
+        color: var(--muted);
+        font-size: 0.85em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 24px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    th, td {
+        padding: 10px 14px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.9em;
+    }
+    th {
+        background: #17202a;
+        color: var(--accent);
+    }
+    tr.event-row { color: var(--danger); }
+    .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-size: 0.75em;
+        background: rgba(255, 77, 94, 0.15);
+        color: var(--danger);
+        border: 1px solid var(--danger);
+    }
+    .no-events {
+        color: var(--muted);
+        font-style: italic;
+    }
+    .chart-container {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 24px;
+    }
+    footer {
+        margin-top: 48px;
+        color: var(--muted);
+        font-size: 0.8em;
+        border-top: 1px solid var(--border);
+        padding-top: 16px;
+    }
+</style>
+</head>
+<body>
+
+<h1>Advanced Packet Analyzer &mdash; Security Summary Dashboard</h1>
+<div class="meta">
+    Source file: {{ pcap_filename }} &nbsp;|&nbsp; Generated: {{ generated_at }}
+</div>
+
+<div class="grid">
+    <div class="card">
+        <div class="value">{{ total_packets }}</div>
+        <div class="label">Total Packets Parsed</div>
+    </div>
+    <div class="card">
+        <div class="value">{{ malformed_count }}</div>
+        <div class="label">Malformed / Skipped</div>
+    </div>
+    <div class="card">
+        <div class="value">{{ arp_summary.total_ips_tracked }}</div>
+        <div class="label">Unique IPs (ARP)</div>
+    </div>
+    <div class="card {{ 'danger' if arp_summary.total_suspicious_events > 0 else '' }}">
+        <div class="value">{{ arp_summary.total_suspicious_events }}</div>
+        <div class="label">Suspicious ARP Events</div>
+    </div>
+</div>
+
+<h2>Protocol Distribution</h2>
+<div class="chart-container">
+    {{ protocol_chart_html | safe }}
+</div>
+
+<table>
+    <tr><th>Protocol</th><th>Packet Count</th></tr>
+    {% for protocol, count in protocol_counts.items() %}
+    <tr><td>{{ protocol }}</td><td>{{ count }}</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Possible ARP Spoofing Events</h2>
+{% if arp_events %}
+<table>
+    <tr>
+        <th>Packet #</th>
+        <th>Timestamp</th>
+        <th>IP Address</th>
+        <th>Previous MAC</th>
+        <th>New MAC</th>
+        <th>Severity</th>
+    </tr>
+    {% for event in arp_events %}
+    <tr class="event-row">
+        <td>{{ event.packet_index }}</td>
+        <td>{{ event.timestamp }}</td>
+        <td>{{ event.ip_address }}</td>
+        <td>{{ event.previous_mac }}</td>
+        <td>{{ event.new_mac }}</td>
+        <td><span class="badge">{{ event.severity }}</span></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p class="no-events">No ARP mapping conflicts were detected in this capture.</p>
+{% endif %}
+
+<h2>IP-to-MAC Mapping Table</h2>
+<table>
+    <tr><th>IP Address</th><th>Current MAC</th><th>Distinct MACs Observed</th></tr>
+    {% for row in ip_mac_rows %}
+    <tr>
+        <td>{{ row.ip_address }}</td>
+        <td>{{ row.current_mac }}</td>
+        <td>{{ row.mac_count }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<footer>
+    Generated by Advanced Packet Analyzer with ARP Spoofing Detection &mdash;
+    an educational, defensive network-analysis tool. This report is based
+    solely on an offline PCAP file and does not reflect live network activity.
+</footer>
+
+</body>
+</html>
